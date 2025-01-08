@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Update</title>
+    <script src="../js/Update.js" defer></script>
+    <link href="../css/Style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="updateDiv">
+        <h1 id="updateH1">Update Details</h1>
+        <input id="userNameUpdate" type="email" placeholder="UserName" />
+        <br />
+        <input id="password" type="password" placeholder="password" onblur="checkPassword()" />
+
+        <meter id="strengthMeter" min="0" max="4" value="0"></meter>
+        <br />
+        <input id="firstNameUpdate" type="text" placeholder="First Name" />
+        <br />
+        <input id="lastNameUpdate" type="text" placeholder="Last Name" />
+        <br />
+        <button id="signUpUpdate" onclick="updateUser()">Update</button>
+    </div>
+</body>
+</html>

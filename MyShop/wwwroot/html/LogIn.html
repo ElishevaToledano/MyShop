@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and registration</title>
+    <link href="../css/Style.css" rel="stylesheet">
+    <script src="../js/LogIn.js" defer></script>
+</head>
+<body>
+    <div class="logInDiv">
+        <input placeholder="username - email" type="email" id="userNameLogin" />
+        <br />
+        <input placeholder="password" type="password" id="passwordLogin" />
+        <br />
+        <button id="logIn" onclick="Login()">Login</button>
+    </div>
+
+    <button id="newUser" class="altButton" onclick="showRegister()">New User</button>
+
+    <div class="signUpDiv">
+        <input id="userName" type="email" placeholder="username" />
+        <br />
+        <input id="password" type="password" placeholder="password" onblur="checkPassword()" />
+
+        <meter id="strengthMeter" min="0" max="4" value="0"></meter>
+        <br />
+        <input id="firstName" type="text" placeholder="first name" />
+        <br />
+        <input id="lastName" type="text" placeholder="Last Name" />
+        <br />
+        <button id="SignUp" onclick="addNewUser()">Sign Up</button>
+        <button class="altButton" onclick="showLogin()">back to login</button>
+    </div>
+</body>
+</html>
