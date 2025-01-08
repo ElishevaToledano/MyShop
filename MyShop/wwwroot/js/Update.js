@@ -44,7 +44,6 @@ const checkPassword = async () => {
         alert(error.message);
     }
 };
-/////////////////
 
 
 const editValueOfUpdatePage = () => {
@@ -54,7 +53,7 @@ const editValueOfUpdatePage = () => {
     const lastName = document.querySelector("#lastNameUpdate")
     const currentUser = JSON.parse(sessionStorage.getItem("user"))
     userName.value = currentUser.userName
-    password.value = currentUser.password
+   
     firstName.value = currentUser.firstName
     lastName.value = currentUser.lastName
     checkPassword();
@@ -76,6 +75,7 @@ const updateUser = async () => {
         alert("Password is too weak")
     else {
         try {
+
             const responseput = await fetch(`https://localhost:44379/api/Users/${currentUser.userId}`, {
                 method: "PUT",
                 headers: {
