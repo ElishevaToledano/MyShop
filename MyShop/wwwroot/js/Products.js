@@ -86,8 +86,7 @@ const addToCart = (product) => {
         productsInbasket.push(product.productId)
         sessionStorage.setItem("basket", JSON.stringify(productsInbasket))
         document.querySelector("#ItemsCountText").innerHTML = productsInbasket.length
-        alert("added")
-    }
+            }
     else {
         alert("please sign")
         window.location.href = "../html/LogIn.html"

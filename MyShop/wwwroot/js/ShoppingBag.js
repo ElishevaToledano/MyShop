@@ -11,7 +11,7 @@ const DrawBacket = async () => {
 }
 
 const showProductBasket = async (product) => {
-    const inbasket = await fetch(`api/product/${product}`, {
+    const inbasket = await fetch(`https://localhost:44379/api/products/${product}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -20,8 +20,6 @@ const showProductBasket = async (product) => {
         query: {
             id: product
         }
-
-
     });
     shopingBag = await inbasket.json();
     console.log(shopingBag)
@@ -29,17 +27,17 @@ const showProductBasket = async (product) => {
 
 }
 const showOneProduct = async (product) => {
-    const url = `./Images/${product.image}`
+    const url = `../images/${product.image}`
     let tmp = document.getElementById("temp-row");
     let cloneProduct = tmp.content.cloneNode(true)
     cloneProduct.querySelector(".image").style.backgroundImage = `url(${url})`
-    cloneProduct.querySelector(".descriptionColumn").textContent = product.descreption
+    cloneProduct.querySelector(".descriptionColumn").textContent = product.descreptions
     cloneProduct.querySelector(".availabilityColumn").innerText = true;
     document.querySelector("tbody").appendChild(cloneProduct)
 };
 
 const detials = () => {
-    let UserId = JSON.parse(sessionStorage.getItem("userId"))
+    let UserId = JSON.parse(sessionStorage.getItem("user"))
     let orderItems1 = JSON.parse(sessionStorage.getItem("basket"))
     const OrderItems = []
     orderItems1.map(t => {
@@ -49,16 +47,15 @@ const detials = () => {
     })
 
     let OrderSum = 100
-    let OrderDate = "2025-01-05"
-    /* OrderDate=OrderDate.toLocaleDateString()*/
+    let OrderDate = new Date()
     return ({
-        OrderDate, OrderSum, UserId, OrderItems,
+        OrderDate, OrderSum, UserId, OrderItems
     })
 }
 
 const placeOrder = async () => {
     let alldetials = detials()
-    const orderss = await fetch('api/Order', {
+    const orderss = await fetch(`https://localhost:44379/api/Orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -76,11 +73,8 @@ const placeOrder = async () => {
 
     }
 
-
     else
         alert("😒")
-
-
 }
 
 
