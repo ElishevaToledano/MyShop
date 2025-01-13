@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace dto
 {
-    public record productDTO( string ProductName,
+    public record productDTO(int ProductId, string ProductName,
         decimal Price, string Descriptions, string CategoryCategoryName,
         string? Image)
 

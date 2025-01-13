@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace dto
 {
-    public record categoryDTO(string CategoryName );
+    public record categoryDTO(int CategoryId, string CategoryName );
 
 }
 

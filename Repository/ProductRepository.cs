@@ -24,7 +24,7 @@ namespace Repository
         {
 
             var query = _ApiOrmContext.Products.Where(Product =>
-            (desc == null ? (true) : (Product.Descriptions.Contains(desc)))
+            (desc == null ? (true) : (Product.ProductName.Contains(desc)))
         && ((minPrice == null) ? (true) : (Product.Price >= minPrice))
         && ((maxPrice == null) ? (true) : (Product.Price <= maxPrice))
         && ((categoryIds.Length == 0) ? (true) : (categoryIds.Contains(Product.CategoryId))))

@@ -18,7 +18,6 @@ const getDetailsFromForm = async () => {
     return search
 }
 const filterProducts = async () => {
-
     drawProducts()
 }
 const drawProducts = async () => {
@@ -39,7 +38,6 @@ const drawProducts = async () => {
                 url += `&categoryIds=${categoryIds1[i]}`
             }
         }
-
     }
     try { 
     const allProducts = await fetch(url, {
@@ -53,9 +51,7 @@ const drawProducts = async () => {
             maxPrice: maxPrice,
             categoryIds: categoryIds1
         }
-
     });
-    
         const dataProducts = await allProducts.json();
 
         console.log('GET Data:', dataProducts)
@@ -76,24 +72,24 @@ const showOneProduct = async (product) => {
     let cloneProduct = tmp.content.cloneNode(true)
     if (product.image)
         cloneProduct.querySelector("img").src = "../images/" + product.image
-    cloneProduct.querySelector("h1").textContent = product.name
+    cloneProduct.querySelector("h1").textContent = product.productName
     cloneProduct.querySelector(".price").innerText = product.price
-    cloneProduct.querySelector(".description").innerText = product.description
+    cloneProduct.querySelector(".description").innerText = product.descriptions
     cloneProduct.querySelector("button").addEventListener('click', () => { addToCart(product) })
     document.getElementById("PoductList").appendChild(cloneProduct)
 }
 const addToCart = (product) => {
 
-    if (sessionStorage.getItem("userId")) {
+    if (sessionStorage.getItem("user")) {
 
         let productsInbasket = JSON.parse(sessionStorage.getItem("basket"))
-        productsInbasket.push(product.productID)
+        productsInbasket.push(product.productId)
         sessionStorage.setItem("basket", JSON.stringify(productsInbasket))
         document.querySelector("#ItemsCountText").innerHTML = productsInbasket.length
-        alert("נוסף בהצלחה")
+        alert("added")
     }
     else {
-        alert("אנא הרשם")
+        alert("please sign")
         window.location.href = "../html/LogIn.html"
     }
 
@@ -127,8 +123,8 @@ const showOneCategory = async (category) => {
 
 const filterCategory = (category) => {
     let categories = JSON.parse(sessionStorage.getItem("categoryIds"))
-    let a = categories.indexOf(category.categoryID)
-    a == -1 ? categories.push(category.categoryID) : categories.splice(a, 1)
+    let a = categories.indexOf(category.categoryId)
+    a == -1 ? categories.push(category.categoryId) : categories.splice(a, 1)
     sessionStorage.setItem("categoryIds", JSON.stringify(categories))
     console.log(categories)
     drawProducts()
