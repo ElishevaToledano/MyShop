@@ -30,7 +30,14 @@ namespace MyShop.Controllers
             List<productDTO> productsDTO = _mapper.Map<List<Product>, List<productDTO>>(products);
             return Ok(productsDTO);
         }
-
+        //GET api/<ProductController>/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<productDTO>> Get(int id)
+        {
+            Product product1 = await ProductService.GetProductbyId(id);
+            productDTO ProductDTO=_mapper.Map<Product, productDTO>(product1);
+            return Ok(ProductDTO);
+        }
 
     }
 }

@@ -34,6 +34,13 @@ namespace Repository
             return products;
 
         }
+        public async Task<Product> GetProductbyId(int id)
+        {
+            return await _ApiOrmContext.Products.FirstOrDefaultAsync(Product => Product.ProductId == id);
+
+
+        }
+
 
 
     }
