@@ -24,17 +24,23 @@ const showProductBasket = async (product) => {
     shopingBag = await inbasket.json();
     console.log(shopingBag)
     showOneProduct(shopingBag);
-
 }
+
 const showOneProduct = async (product) => {
     const url = `../images/${product.image}`
     let tmp = document.getElementById("temp-row");
     let cloneProduct = tmp.content.cloneNode(true)
     cloneProduct.querySelector(".image").style.backgroundImage = `url(${url})`
-    cloneProduct.querySelector(".descriptionColumn").textContent = product.descreptions
     cloneProduct.querySelector(".availabilityColumn").innerText = true;
+    cloneProduct.querySelector(".itemName").textContent = product.productName
+    cloneProduct.querySelector(".price").innerText = product.price
+    cloneProduct.getElementById("delete").addEventListener('click', () => {
+       deleteItem(product)
+    })
     document.querySelector("tbody").appendChild(cloneProduct)
 };
+
+
 
 const detials = () => {
     let UserId = JSON.parse(sessionStorage.getItem("user"))
@@ -46,11 +52,25 @@ const detials = () => {
         OrderItems.push(object)
     })
 
-    let OrderSum = 100
+    let OrderSum = orderItems1.length
     let OrderDate = new Date()
     return ({
         OrderDate, OrderSum, UserId, OrderItems
     })
+}
+const deleteItem = (product) => {
+        products = JSON.parse(sessionStorage.getItem("basket"))
+        let j = 0
+        for (j = 0; j < products.length; j++) {
+
+            if (products[j] == product.productId) {
+                break;
+            }
+        }
+        products.splice(j, 1)
+        sessionStorage.setItem("basket", JSON.stringify(products))
+        window.location.href = "ShoppingBag.html"
+        getOrderProducts()
 }
 
 const placeOrder = async () => {
@@ -66,7 +86,7 @@ const placeOrder = async () => {
     });
     alldetialss = await orderss.json();
     if (orderss.ok) {
-        alert("nice")
+        alert("nice")                                
         sessionStorage.setItem("basket", JSON.stringify([]))
         location.reload()
         window.location.href = "Products.html";
