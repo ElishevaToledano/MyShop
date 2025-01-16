@@ -1,13 +1,17 @@
-﻿
-const Basket = addEventListener("load", async () => {
-    DrawBacket()
+﻿const Basket = addEventListener("load", async () => {
+    DrawBasket()
 })
 
-const DrawBacket = async () => {
+const DrawBasket = async () => {
     let products = JSON.parse(sessionStorage.getItem("basket"))
+    let totalAmount = 0;
     for (let i = 0; i < products.length; i++)
+    { 
         await showProductBasket(products[i])
-
+        totalAmount = totalAmount + parseInt(products[i].price)
+    }
+    document.getElementById("totalAmount").innerHTML = totalAmount + '$';
+    document.getElementById("itemCount").innerHTML = parseInt(products.length) ;
 }
 
 const showProductBasket = async (product) => {
@@ -16,7 +20,6 @@ const showProductBasket = async (product) => {
         headers: {
             'Content-Type': 'application/json'
         },
-
         query: {
             id: product
         }
@@ -43,7 +46,8 @@ const showOneProduct = async (product) => {
 
 
 const detials = () => {
-    let UserId = JSON.parse(sessionStorage.getItem("user"))
+    let UserId1= JSON.parse(sessionStorage.getItem("user"))
+    let UserId = UserId1.userId
     let orderItems1 = JSON.parse(sessionStorage.getItem("basket"))
     const OrderItems = []
     orderItems1.map(t => {
@@ -70,7 +74,7 @@ const deleteItem = (product) => {
         products.splice(j, 1)
         sessionStorage.setItem("basket", JSON.stringify(products))
         window.location.href = "ShoppingBag.html"
-        getOrderProducts()
+    showProductBasket()
 }
 
 const placeOrder = async () => {
@@ -80,9 +84,7 @@ const placeOrder = async () => {
         headers: {
             'Content-Type': 'application/json'
         },
-
         body: JSON.stringify(alldetials)
-
     });
     alldetialss = await orderss.json();
     if (orderss.ok) {
