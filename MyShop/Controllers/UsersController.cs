@@ -18,10 +18,13 @@ namespace MyShop.Controllers
 
         IUserService UserService;
         IMapper _mapper;
-        public UsersController(IUserService userService, IMapper mapper)
+        ILogger<UsersController> _logger;
+        
+        public UsersController(IUserService userService, IMapper mapper, ILogger<UsersController> logger)
         {
             UserService = userService;
               _mapper=mapper;
+            _logger = logger;
         }
 
         // GET api/<UsersController>/5
@@ -58,9 +61,16 @@ namespace MyShop.Controllers
         public async Task<ActionResult<userDTO>> LogIn([FromQuery] string userName,
             string password)
         {
-            User userLogin =await UserService.LogIn(userName, password);
-            userDTO userDTO = _mapper.Map<User, userDTO>(userLogin);
-            return userDTO == null? NoContent():Ok(userDTO);
+
+                _logger.LogCritical($"Login attempted with User name, {userName} and password {password}");
+                User userLogin = await UserService.LogIn(userName, password);
+                userDTO userDTO = _mapper.Map<User, userDTO>(userLogin);
+                return userDTO == null ? NoContent() : Ok(userDTO);
+
+
+
+
+
         }
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]

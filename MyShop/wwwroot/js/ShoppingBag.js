@@ -4,13 +4,13 @@
 
 const DrawBasket = async () => {
     let products = JSON.parse(sessionStorage.getItem("basket"))
-    let totalAmount = 0;
+    const totalAmount = 0;
     for (let i = 0; i < products.length; i++)
     { 
         await showProductBasket(products[i])
-        totalAmount = totalAmount + parseInt(products[i].price)
+ /*       totalAmount = totalAmount + parseInt(products[i].price)*/
     }
-    document.getElementById("totalAmount").innerHTML = totalAmount + '$';
+    //document.getElementById("totalAmount").innerHTML = `${totalAmount}$`;
     document.getElementById("itemCount").innerHTML = parseInt(products.length) ;
 }
 
