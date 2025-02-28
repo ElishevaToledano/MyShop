@@ -12,15 +12,15 @@ namespace service
 {
     public class RatingService : IRatingService
     {
-        IRatingService ratingService;
-        public RatingService(IRatingService ratingService)
+        IRatingRepository ratingRepository;
+        public RatingService(IRatingRepository ratingRepository)
         {
-            this.ratingService = ratingService;
+            this.ratingRepository = ratingRepository;
         }
 
         public async Task AddRaiting(Rating ratingObj)
         {
-            return await RatingRepository.AddRating(ratingObj);
+            return await ratingRepository.AddRating(ratingObj);
         }
     }
 }

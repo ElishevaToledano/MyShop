@@ -20,11 +20,11 @@ namespace MyShop.MiddleWare
         {
             Rating newRating = new()
             {
-                Host = httpContext.Request.Host.Value,
-                Method = httpContext.Request.Method,
-                Path = httpContext.Request.Path.Value,
-                Referer = httpContext.Request.Headers.Referer,
-                UserAgent = httpContext.Request.Headers.UserAgent,
+                Host = httpContext.Request.Host.Value.ToString(),
+                Method = httpContext.Request.Method.ToString(),
+                Path = httpContext.Request.Path.Value.ToString(),
+                Referer = httpContext.Request.Headers.Referer.ToString(),
+                UserAgent = httpContext.Request.Headers.UserAgent.ToString(),
                 RecordDate = DateTime.Now
             };
             ratingService.AddRaiting(newRating);
