@@ -53,36 +53,7 @@ public partial class ApiOrmContext : DbContext
                 .HasConstraintName("FK_User_Id");
         });
 
-        modelBuilder.Entity<Rating>(entity =>
-        {
-            entity.ToTable("RATING");
-
-            entity.Property(e => e.RatingId).HasColumnName("RATING_ID");
-
-            entity.Property(e => e.Host)
-                .HasColumnName("HOST")
-                .HasMaxLength(50);
-
-            entity.Property(e => e.Method)
-                .HasColumnName("METHOD")
-                .HasMaxLength(10)
-                .IsFixedLength();
-
-            entity.Property(e => e.Path)
-                .HasColumnName("PATH")
-                .HasMaxLength(50);
-
-            entity.Property(e => e.RecordDate)
-             .HasColumnName("Record_Date")
-             .HasColumnType("datetime");
-
-            entity.Property(e => e.Referer)
-                .HasColumnName("REFERER")
-                .HasMaxLength(100);
-
-            entity.Property(e => e.UserAgent).HasColumnName("USER_AGENT");
-            entity.Property(e => e.UserAgent).HasColumnName("USER_Id");
-        });
+       
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
@@ -128,6 +99,38 @@ public partial class ApiOrmContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(20);
             entity.Property(e => e.UserName).HasMaxLength(20);
         });
+
+
+        modelBuilder.Entity<Rating>(entity =>
+        {
+            entity.ToTable("RATING");
+
+            entity.Property(e => e.RatingId).HasColumnName("RATING_ID");
+
+            entity.Property(e => e.Host)
+                .HasColumnName("HOST")
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Method)
+                .HasColumnName("METHOD")
+                .HasMaxLength(10)
+                .IsFixedLength();
+
+            entity.Property(e => e.Path)
+                .HasColumnName("PATH")
+                .HasMaxLength(50);
+
+            entity.Property(e => e.RecordDate)
+             .HasColumnName("Record_Date")
+             .HasColumnType("datetime");
+
+            entity.Property(e => e.Referer)
+                .HasColumnName("REFERER")
+                .HasMaxLength(100);
+
+            entity.Property(e => e.UserAgent).HasColumnName("USER_AGENT");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MyShop.MiddleWare;
+using MyShop;
 using NLog.Web;
-using PresidentsApp.Middlewares;
+
 using Repository;
 using service;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,8 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddDbContext<ApiOrmContext>(options => options.UseSqlServer(
 "Server=SRV2\\PUPILS;Database=api_orm;Trusted_Connection=True;TrustServerCertificate=True"));
 builder.Services.AddEndpointsApiExplorer();
@@ -36,7 +37,7 @@ if(app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseRatingMiddleware();
+
 
 app.UseHttpsRedirection();
 
@@ -46,10 +47,10 @@ app.UseStaticFiles();
 
 
 
-app.UseErrorHandlingMiddleware();
+
 
 app.UseAuthorization();
-
+app.UseMiddlewareRating();
 app.MapControllers();
 
 app.Run();
