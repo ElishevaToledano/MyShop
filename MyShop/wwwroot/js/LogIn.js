@@ -15,12 +15,12 @@ const getAllDetilesForLogin = () => {
 };
 
 const getAllDetilesForSignUp = () => {
-    return {
-        UserName: document.querySelector("#userName").value,
-        Password: document.querySelector("#password").value,
-        FirstName: document.querySelector("#firstName").value,
-        LastName: document.querySelector("#lastName").value
-    };
+  
+        const UserName=  document.querySelector("#userName").value
+        const Password= document.querySelector("#password").value
+        const FirstName= document.querySelector("#firstName").value
+        const LastName= document.querySelector("#lastName").value
+    return { UserName, Password, FirstName, LastName };
 };
 
 const checkData = (user) => {
@@ -52,6 +52,12 @@ const checkPassword = async () => {
             },
             body: JSON.stringify(password)
         });
+
+
+
+
+
+
         const responseData = await responsePost.json();
         meterColor(responseData);
         if (!responsePost.ok) {
@@ -117,7 +123,8 @@ const showLogin = () => {
     document.querySelector("#newUser").style.display = "block";
 };
 
-const Login = async () => {
+const Login = async () =>
+{
     const user = getAllDetilesForLogin();
     if (!checkData(user)) {
         alert("All fields are required");
@@ -126,26 +133,39 @@ const Login = async () => {
 
     try {
         const responsePost = await fetch(`https://localhost:44379/api/Users/login?userName=${user.UserName}&password=${user.Password}`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
+            },
+            query: {
+                email: user.UserName,
+                password: user.Password
             }
         });
 
-        if (responsePost.status === 400)
-            throw new Error("All fields are required");
-        if (responsePost.status === 204)
-            throw new Error("Unregistered user");
-        if (!responsePost.ok)
-            throw new Error("Something went wrong, try again");
 
+        //    method: "POST",
+        //    headers: {
+        //        "Content-Type": "application/json"
+        //    }
+        //});
+
+        if (responsePost.status == 204)
+            alert("User not found")
+        if (!responsePost.ok)
+            alert("Eror,please try again")
+        else
+        { 
         const dataPost = await responsePost.json();
         sessionStorage.setItem("user", JSON.stringify(dataPost));
         window.location.href = "../html/Products.html";
- 
+        }
 
-    } catch (error) {
+    }
+    catch (error)
+    {
         alert(error);
+
     }
 }
 

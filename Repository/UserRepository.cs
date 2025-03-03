@@ -36,10 +36,10 @@ namespace Repository
 
         public async Task<User> LogIn(string userName, string password)
         {
-           return await _ApiOrmContext.Users.FirstOrDefaultAsync(
-               (user=> user.UserName== userName &&user.Password== password));
-
+             return  await _ApiOrmContext.Users.FirstOrDefaultAsync(user=> user.UserName== userName && user.Password== password);
+             
         }
+
 
 
     }

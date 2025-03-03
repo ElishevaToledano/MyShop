@@ -43,7 +43,6 @@ namespace MyShop.Controllers
 
             User newUser =  _mapper.Map<RegisterUserDTO, User>(user);
             User userDTO = await UserService.AddUser(newUser);
-
             userDTO newUserDTO = _mapper.Map<User, userDTO>(userDTO);
             return newUserDTO != null?  Ok(newUserDTO): BadRequest(newUserDTO);
 
@@ -51,21 +50,20 @@ namespace MyShop.Controllers
             [HttpPost("password")]
         public async Task<IActionResult> CheckPassword([FromBody] string password)
         {
-
           int Score =  UserService.CheckPassword(password);
           return  (Score < 3)?BadRequest(Score):Ok(Score);
         }
 
-
         [HttpPost("login")]
-        public async Task<ActionResult<userDTO>> LogIn([FromQuery] string userName,
-            string password)
+        public async Task<ActionResult<User>> LogIn([FromQuery] string userName, [FromQuery] string password)
         {
 
                 _logger.LogCritical($"Login attempted with User name, {userName} and password {password}");
                 User userLogin = await UserService.LogIn(userName, password);
-                userDTO userDTO = _mapper.Map<User, userDTO>(userLogin);
-                return userDTO == null ? NoContent() : Ok(userDTO);
+                userDTO UserDTO = _mapper.Map<User, userDTO>(userLogin);
+                //return userDTO == null ? NoContent() : Ok(userDTO);
+                return UserDTO == null ? BadRequest() : Ok(UserDTO);
+
 
 
 

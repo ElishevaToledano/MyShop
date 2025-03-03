@@ -57,8 +57,8 @@ const showOneProduct = async (product) => {
 };
 
 
+const detailsForOrder = () => {
 
-const detials = () => {
     const UserId1= JSON.parse(sessionStorage.getItem("user"))
     const UserId = UserId1.userId
     let orderItems1 = JSON.parse(sessionStorage.getItem("basket"))
@@ -68,12 +68,23 @@ const detials = () => {
 
         OrderItems.push(object)
     })
-    let sum = orderItems1.length * 10
+    //sessionStorage.setItem("basketTwo", JSON.stringify(OrderItems))
+    let OrderSum = 0;
+   
+    let productsToBasket2 = JSON.parse(sessionStorage.getItem("basketTwo"))
+
+    for (j = 0; j < productsToBasket2.length; j++) {
+
+        OrderSum += productsToBasket2[j].price
+    }
+
     let OrderDate = new Date()
+
     return ({
-        OrderDate, sum, UserId, OrderItems
+        OrderDate, OrderSum, UserId, OrderItems
     })
 }
+
 const deleteItem = (product) => {
         products = JSON.parse(sessionStorage.getItem("basket"))
         let j = 0
@@ -90,25 +101,28 @@ const deleteItem = (product) => {
 }
 
 const placeOrder = async () => {
-    let alldetials = detials()
+    let alldetails = detailsForOrder()
     const orderss = await fetch(`https://localhost:44379/api/Orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(alldetials)
+        body: JSON.stringify(alldetails)
     });
-    alldetialss = await orderss.json();
-    if (orderss.ok) {
-        alert("nice")                                
-        sessionStorage.setItem("basket", JSON.stringify([]))
-        location.reload()
-        window.location.href = "Products.html";
-
+    if (!orderss.ok) {
+        throw new Error("bbbbbbbbb")
     }
 
     else
-        alert("😒")
+    {
+        alert("nice")
+        //const lalldetails = await orderss.json();
+        sessionStorage.setItem("basket", JSON.stringify([]))
+        sessionStorage.setItem("basketTwo", JSON.stringify([]))
+
+        location.reload()
+        window.location.href = "./Products.html";
+    }
 }
 
 
