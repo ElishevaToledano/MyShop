@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyShop;
 using NLog.Web;
-
 using Repository;
 using service;
 
@@ -37,21 +36,10 @@ if(app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
 app.UseHttpsRedirection();
-
-
 app.UseStaticFiles();
-
-
-
-
-
-
 app.UseAuthorization();
 app.UseMiddlewareRating();
 app.MapControllers();
-
 app.Run();
 

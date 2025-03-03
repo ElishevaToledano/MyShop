@@ -4,13 +4,21 @@
 
 const DrawBasket = async () => {
     let products = JSON.parse(sessionStorage.getItem("basket"))
-    const totalAmount = 0;
+    let totalAmount = 0;
+    let productsToBasketTwo = []
+    sessionStorage.setItem("basketTwo", JSON.stringify(productsToBasketTwo))
     for (let i = 0; i < products.length; i++)
     { 
         await showProductBasket(products[i])
- /*       totalAmount = totalAmount + parseInt(products[i].price)*/
+
     }
-    //document.getElementById("totalAmount").innerHTML = `${totalAmount}$`;
+    let productsToBasket2 = JSON.parse(sessionStorage.getItem("basketTwo"))
+
+    for (j = 0; j < productsToBasket2.length; j++) {
+
+        totalAmount += productsToBasket2[j].price
+    }
+    document.getElementById("totalAmount").innerHTML = `${totalAmount}$`;
     document.getElementById("itemCount").innerHTML = parseInt(products.length) ;
 }
 
@@ -26,6 +34,11 @@ const showProductBasket = async (product) => {
     });
     shopingBag = await inbasket.json();
     console.log(shopingBag)
+
+    let productsToBasket2 = JSON.parse(sessionStorage.getItem("basketTwo"))
+    productsToBasket2.push(shopingBag)
+    sessionStorage.setItem("basketTwo", JSON.stringify(productsToBasket2))
+
     showOneProduct(shopingBag);
 }
 
@@ -46,8 +59,8 @@ const showOneProduct = async (product) => {
 
 
 const detials = () => {
-    let UserId1= JSON.parse(sessionStorage.getItem("user"))
-    let UserId = UserId1.userId
+    const UserId1= JSON.parse(sessionStorage.getItem("user"))
+    const UserId = UserId1.userId
     let orderItems1 = JSON.parse(sessionStorage.getItem("basket"))
     const OrderItems = []
     orderItems1.map(t => {
@@ -55,11 +68,10 @@ const detials = () => {
 
         OrderItems.push(object)
     })
-
-    let OrderSum = orderItems1.length
+    let sum = orderItems1.length * 10
     let OrderDate = new Date()
     return ({
-        OrderDate, OrderSum, UserId, OrderItems
+        OrderDate, sum, UserId, OrderItems
     })
 }
 const deleteItem = (product) => {

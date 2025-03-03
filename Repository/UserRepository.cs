@@ -28,7 +28,7 @@ namespace Repository
         public async Task<User> UpdateUser(int id, User userToUpdate)
         {
             userToUpdate.UserId = id;
-            _ApiOrmContext.Users.Update(userToUpdate);
+             _ApiOrmContext.Users.Update(userToUpdate);
             await _ApiOrmContext.SaveChangesAsync();
             return userToUpdate;
 

@@ -100,7 +100,6 @@ public partial class ApiOrmContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(20);
         });
 
-
         modelBuilder.Entity<Rating>(entity =>
         {
             entity.ToTable("RATING");
@@ -129,6 +128,7 @@ public partial class ApiOrmContext : DbContext
                 .HasMaxLength(100);
 
             entity.Property(e => e.UserAgent).HasColumnName("USER_AGENT");
+            //entity.Property(e => e.UserAgent).HasColumnName("USER_ID");
         });
 
 
