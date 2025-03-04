@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 namespace TestProject1
 {
-    public class UnitTest1
+    public class UnitUserTest1
     {
         [Fact]
         public async Task Login_ValidCredentialsREturnsUser()
