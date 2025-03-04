@@ -1,4 +1,5 @@
 ﻿using Entity;
+using Microsoft.Extensions.Logging;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,19 @@ using System.Threading.Tasks;
 
 namespace service
 {
-    public class OrderService : IOrderService
-    {
 
+
+        public class OrderService : IOrderService
+    {
+        private readonly ILogger<OrderService> _logger;
         IOrderRepository orderRepository;
         IProductRepository _productsRepository;
-        public OrderService(IOrderRepository orderRepository, IProductRepository productsRepository)
+        public OrderService(IOrderRepository orderRepository, IProductRepository productsRepository, ILogger<OrderService> logger)
         {
             this.orderRepository = orderRepository;
             this._productsRepository= productsRepository;
-        }
+                _logger = logger;
+            }
 
         public async Task<Order> GetOrderById(int id)
         {
@@ -27,7 +31,10 @@ namespace service
         public async Task<Order> AddOrder(Order order)
         {
             if (!await CheckSum(order))
+            {
+                _logger.LogCritical($"the orderSum is not equals!! the costumer is &{order.UserId} is dangerous!!");
                 return null;
+            }
             return await orderRepository.AddOrder(order);
         }
 
