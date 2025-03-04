@@ -1,4 +1,16 @@
-﻿const strengthMeter = document.getElementById("strengthMeter");
+﻿
+const start = addEventListener("load", async () => {
+    const userName = document.querySelector("#userNameUpdate")
+/*    const password = document.querySelector("#password")*/
+    const firstName = document.querySelector("#firstNameUpdate")
+    const lastName = document.querySelector("#lastNameUpdate")
+    const currentUser = JSON.parse(sessionStorage.getItem("user"))
+    userName.value = currentUser.userName
+    firstName.value = currentUser.firstName
+    lastName.value = currentUser.lastName
+})
+
+const strengthMeter = document.getElementById("strengthMeter");
 strengthMeter.value = 0;
 
 //CHECK PASSWORD
@@ -46,19 +58,27 @@ const checkPassword = async () => {
 };
 
 
-const editValueOfUpdatePage = () => {
-    const userName = document.querySelector("#userNameUpdate")
-    const password = document.querySelector("#password")
-    const firstName = document.querySelector("#firstNameUpdate")
-    const lastName = document.querySelector("#lastNameUpdate")
-    const currentUser = JSON.parse(sessionStorage.getItem("user"))
-    userName.value = currentUser.userName
-   
-    firstName.value = currentUser.firstName
-    lastName.value = currentUser.lastName
-    checkPassword();
-}
-editValueOfUpdatePage()
+//const getAllDetilesForUpdate = () => {
+//    const userName = document.querySelector("#userNameUpdate")
+//    const password = document.querySelector("#password")
+//    const firstName = document.querySelector("#firstNameUpdate")
+//    const lastName = document.querySelector("#lastNameUpdate")
+//    const currentUser = JSON.parse(sessionStorage.getItem("user"))
+//    userName.value = currentUser.userName
+//    firstName.value = currentUser.firstName
+//    lastName.value = currentUser.lastName
+
+//    return newUser = {
+//        UserName: userName,
+//        Password: password,
+//        FirstName: firstName,
+//        LastName: lastName
+//    }
+//    /*checkPassword();*/
+//}
+
+
+//editValueOfUpdatePage()
 const getAllDetilesForUpdate = () => {
     return newUser = {
         UserName: document.querySelector("#userNameUpdate").value,

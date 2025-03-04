@@ -6,6 +6,19 @@ const productList = addEventListener("load", async () => {
     let basketArr = JSON.parse(sessionStorage.getItem("basket")) || [];
     sessionStorage.setItem("basket", JSON.stringify(basketArr))
     document.querySelector("#ItemsCountText").innerHTML = basketArr.length
+
+
+    if (sessionStorage.getItem('user') != null) {
+        document.getElementById('Login').style.display = 'block';
+        document.getElementById('Logout').style.display = 'block';
+        document.getElementById('Update').style.display = 'block';
+    }
+    else
+    {
+        document.getElementById('Login').style.display = 'block';
+        document.getElementById('Logout').style.display = 'none';
+        document.getElementById('Update').style.display = 'none';
+    }
 })
 
 const getDetailsFromForm = async () => {
@@ -133,4 +146,7 @@ const Logout = () => {
     sessionStorage.removeItem("user");
     let productsToRemove = []
     sessionStorage.setItem("basket", JSON.stringify(productsToRemove))
+    document.getElementById('Login').style.display = 'block';
+    document.getElementById('Logout').style.display = 'none';
+    document.getElementById('Update').style.display = 'none';
 }
