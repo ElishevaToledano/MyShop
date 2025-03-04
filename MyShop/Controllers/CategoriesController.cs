@@ -27,7 +27,7 @@ namespace MyShop.Controllers
 
         // GET: api/<CategoryController>
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> Get()
+        public async Task<ActionResult<List<categoryDTO>>> Get()
         {
             if (!_memoryCache.TryGetValue("categories", out List<Category> categories))
             {
