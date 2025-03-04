@@ -89,7 +89,7 @@ const updateUser = async () => {
 
             if (responseput.status == 200) {
                 alert(`The user  ${currentUser.firstName}  details updated successfully!`)
-                window.location.href = "/html/Login.html";
+                window.location.href = "/html/Products.html";
             }
         }
         catch (error) {

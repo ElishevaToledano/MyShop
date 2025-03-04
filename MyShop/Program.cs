@@ -26,6 +26,7 @@ builder.Services.AddDbContext<ApiOrmContext>(options => options.UseSqlServer(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseNLog();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

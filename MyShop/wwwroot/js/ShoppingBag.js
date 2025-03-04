@@ -110,13 +110,14 @@ const placeOrder = async () => {
         body: JSON.stringify(alldetails)
     });
     if (!orderss.ok) {
-        throw new Error("bbbbbbbbb")
+        throw new Error("somthing was wrong, try again")
     }
 
     else
     {
-        alert("nice")
-        //const lalldetails = await orderss.json();
+        const lalldetails = await orderss.json();
+        alert(`yout order number ${lalldetails.orderId} end successfully`)
+
         sessionStorage.setItem("basket", JSON.stringify([]))
         sessionStorage.setItem("basketTwo", JSON.stringify([]))
 
@@ -124,7 +125,3 @@ const placeOrder = async () => {
         window.location.href = "./Products.html";
     }
 }
-
-
-
-

@@ -9,8 +9,8 @@ const welcome = () => {
 welcome();
 const getAllDetilesForLogin = () => {
     return {
-        UserName: document.querySelector("#userNameLogin").value,
-        Password: document.querySelector("#passwordLogin").value,
+        userName: document.querySelector("#userNameLogin").value,
+        password: document.querySelector("#passwordLogin").value,
     };
 };
 
@@ -24,7 +24,7 @@ const getAllDetilesForSignUp = () => {
 };
 
 const checkData = (user) => {
-    return (user.UserName && user.Password);
+    return (user.userName && user.password);
 };
 
 //CHECK PASSWORD
@@ -132,14 +132,10 @@ const Login = async () =>
     }
 
     try {
-        const responsePost = await fetch(`https://localhost:44379/api/Users/login?userName=${user.UserName}&password=${user.Password}`, {
+        const responsePost = await fetch(`https://localhost:44379/api/Users/login?userName=${user.userName}&password=${user.password}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            query: {
-                email: user.UserName,
-                password: user.Password
             }
         });
 
@@ -167,6 +163,9 @@ const Login = async () =>
         alert(error);
 
     }
+
+
+
 }
 
 

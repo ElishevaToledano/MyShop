@@ -1,9 +1,9 @@
 const productList = addEventListener("load", async () => {
+    let categoryIdArr = JSON.parse(sessionStorage.getItem("categoryIds")) || [];
+    sessionStorage.setItem("categoryIds", JSON.stringify(categoryIdArr))
     drawProducts()
     showAllCategories();
-    //let categoryIdArr = [];
     let basketArr = JSON.parse(sessionStorage.getItem("basket")) || [];
-/*    sessionStorage.setItem("categoryIds", JSON.stringify(categoryIdArr))*/
     sessionStorage.setItem("basket", JSON.stringify(basketArr))
     document.querySelector("#ItemsCountText").innerHTML = basketArr.length
 })
@@ -21,7 +21,7 @@ const filterProducts = async () => {
     drawProducts()
 }
 const drawProducts = async () => {
-    const categoryIds1 = JSON.parse(sessionStorage.getItem("basket"))
+    const categoryIds1 = JSON.parse(sessionStorage.getItem("categoryIds"))
     console.log(categoryIds1)
     let { nameSearch, minPrice, maxPrice } = await getDetailsFromForm()
     let url = `https://localhost:44379/api/products`
@@ -54,11 +54,11 @@ const drawProducts = async () => {
     });
         const dataProducts = await allProducts.json();
 
-        console.log('GET Data:', dataProducts)
+        //console.log('GET Data:', dataProducts)
         showAllProducts(dataProducts);
 }
 catch(error) {
-    alert("bbbbbbbbbb")
+    alert("error")
 }
 }
 const showAllProducts = async (products) => {
@@ -129,3 +129,8 @@ const filterCategory = (category) => {
     drawProducts()
 }
 
+const Logout = () => {
+    sessionStorage.removeItem("user");
+    let productsToRemove = []
+    sessionStorage.setItem("basket", JSON.stringify(productsToRemove))
+}
