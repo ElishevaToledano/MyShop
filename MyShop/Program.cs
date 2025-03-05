@@ -8,7 +8,7 @@ using service;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+/////pr test//////
 // Add services to the container.
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
