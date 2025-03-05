@@ -52,7 +52,7 @@ namespace MyShop.Controllers
           int Score =  UserService.CheckPassword(password);
           return  (Score < 3)?BadRequest(Score):Ok(Score);
         }
-
+        //
         [HttpPost("login")]
         public async Task<ActionResult<User>> LogIn([FromQuery] string userName , string password)
         {
