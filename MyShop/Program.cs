@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyShop;
 using NLog.Web;
+using PresidentsApp.Middlewares;
 using Repository;
 using service;
 
@@ -36,6 +37,8 @@ if(app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseErrorHandlingMiddleware();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

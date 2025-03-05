@@ -40,12 +40,12 @@ namespace MyShop.Controllers
         [HttpPost]
         public async Task<ActionResult<userDTO>> Register([FromBody] RegisterUserDTO user)
         {
-
             User newUser =  _mapper.Map<RegisterUserDTO, User>(user);
             User userDTO = await UserService.AddUser(newUser);
             userDTO newUserDTO = _mapper.Map<User, userDTO>(userDTO);
             return newUserDTO != null?  Ok(newUserDTO): BadRequest(newUserDTO);
         }
+
             [HttpPost("password")]
         public async Task<IActionResult> CheckPassword([FromBody] string password)
         {
