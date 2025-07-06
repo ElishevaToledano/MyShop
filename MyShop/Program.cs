@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.RateLimiting;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using MyShop;
 using NLog.Web;
 using PresidentsApp.Middlewares;
@@ -27,7 +32,45 @@ builder.Services.AddDbContext<ApiOrmContext>(options => options.UseSqlServer(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseNLog();
+
 builder.Services.AddMemoryCache();
+
+// הוספת Rate Limiter
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", o =>
+    {
+        o.Window = TimeSpan.FromMinutes(1); 
+        o.PermitLimit = 20;
+        o.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+        o.QueueLimit = 0;
+    });
+});
+
+// קריאת הגדרות JWT מ-appsettings.json
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection["Key"];
+var jwtIssuer = jwtSection["Issuer"];
+var jwtAudience = jwtSection["Audience"];
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey))
+    };
+});
 
 var app = builder.Build();
 
@@ -38,10 +81,13 @@ if(app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseErrorHandlingMiddleware();
 
+
+app.UseErrorHandlingMiddleware();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRateLimiter();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddlewareRating();
 app.MapControllers();
