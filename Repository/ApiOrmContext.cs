@@ -96,7 +96,8 @@ public partial class ApiOrmContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("firstName");
             entity.Property(e => e.LastName).HasMaxLength(20);
-            entity.Property(e => e.Password).HasMaxLength(20);
+            entity.Property(e => e.Password).HasMaxLength(200);
+            entity.Property(e => e.PasswordSalt).HasMaxLength(64);
             entity.Property(e => e.UserName).HasMaxLength(20);
         });
 

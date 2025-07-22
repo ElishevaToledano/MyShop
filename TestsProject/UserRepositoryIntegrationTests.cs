@@ -80,7 +80,7 @@ namespace Test
             await _context.SaveChangesAsync();
             // Act 
 
-            var loggedInUser =await _reposetory.LogIn("testuser@example.com", "password123##");
+            var loggedInUser =await _reposetory.LogIn("testuser@example.com");
             // Assert
             Assert.NotNull(loggedInUser);
             Assert.Equal(user.UserName, loggedInUser.UserName.Trim());
@@ -91,7 +91,7 @@ namespace Test
         public async Task Login_ShouldReturnNull_WhenCredentialsAreInvalid()
         {
             // Act
-            var loggedInUser =  await _reposetory.LogIn("Ttestuser@example.com", "password123##");
+            var loggedInUser =  await _reposetory.LogIn("Ttestuser@example.com");
 
             // Assert
             Assert.Null(loggedInUser);

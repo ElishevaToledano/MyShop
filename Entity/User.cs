@@ -14,7 +14,7 @@ public partial class User
     [StringLength(20, ErrorMessage = "The name is limited to 20 letters.")]
     public string? LastName { get; set; }
 
-    public string? Password { get; set; }
-
+    public string Password { get; set; }
+    public string PasswordSalt { get; set; }
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

@@ -2,11 +2,12 @@
 strengthMeter.value = 0;
 
 const welcome = () => {
-    const currentUser = JSON.parse(sessionStorage.getItem("user"))
+    const currentUser = JSON.parse(sessionStorage.getItem("user"));
     if (currentUser != null)
         document.querySelector("#newUser").style.display = "none";
-}
+};
 welcome();
+
 const getAllDetilesForLogin = () => {
     return {
         userName: document.querySelector("#userNameLogin").value,
@@ -15,11 +16,10 @@ const getAllDetilesForLogin = () => {
 };
 
 const getAllDetilesForSignUp = () => {
-  
-        const UserName=  document.querySelector("#userName").value
-        const Password= document.querySelector("#password").value
-        const FirstName= document.querySelector("#firstName").value
-        const LastName= document.querySelector("#lastName").value
+    const UserName = document.querySelector("#userName").value;
+    const Password = document.querySelector("#password").value;
+    const FirstName = document.querySelector("#firstName").value;
+    const LastName = document.querySelector("#lastName").value;
     return { UserName, Password, FirstName, LastName };
 };
 
@@ -27,20 +27,18 @@ const checkData = (user) => {
     return (user.userName && user.password);
 };
 
-//CHECK PASSWORD
+// מעדכן את ערך המטר לפי הציון
+const meterColor = (score) => {
+    strengthMeter.value = score;
+};
 
-const meterColor = (resData) => {
-    strengthMeter.value = resData;
-}
-
-
-// Function to get password details
+// פונקציה לקבלת סיסמה מהקלט
 const getDetailsOfPassword = () => {
-    const password = document.getElementById("password").value;
-    return password;
-}
+    return document.getElementById("password").value;
+};
 
-// Function to check password strength
+const passwordMessage = document.getElementById("passwordMessage");
+
 const checkPassword = async () => {
     const password = getDetailsOfPassword();
 
@@ -53,64 +51,58 @@ const checkPassword = async () => {
             body: JSON.stringify(password)
         });
 
-
-
-
-
-
         const responseData = await responsePost.json();
-        meterColor(responseData);
-        if (!responsePost.ok) {
-
-            if (responsePost.status === 400)
-                throw new Error("all fields are request");
-            else if (responsePost.status === 401)
-                throw new Error("one of he fields are not valid");
-            else { 
-                throw new Error("Something went wrong, try again");
-            }
-        }
-        else {
-            alert("Password is strong enough!");
-
+        const score = Number(responseData.score);
+        if (!isFinite(score)) {
+            throw new Error("Invalid score received from server");
         }
 
+        meterColor(score);
+
+        if (score < 3) {
+            passwordMessage.textContent = "Password is too weak";
+        } else {
+            passwordMessage.textContent = "Password is strong enough!";
+        }
 
     }
     catch (error) {
-        alert(error.message);
+        passwordMessage.textContent = error.message;
     }
 };
-/////////////////
+
 
 const addNewUser = async () => {
     const newUser = getAllDetilesForSignUp();
     if (strengthMeter.value < 3)
-        alert("Password is too weak")
-    else { 
-    try {
-        const responsePost = await fetch(`https://localhost:44379/api/Users`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newUser)
-        });
+        alert("Password is too weak");
+    else {
+        try {
+            const responsePost = await fetch(`https://localhost:44379/api/Users`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newUser)
+            });
 
-        if (responsePost.status === 400)
-            throw new Error("All fields are required");
+            if (responsePost.status === 400)
+                throw new Error("All fields are required");
+            if (responsePost.status === 401)
+                throw new Error("one of he fields are not valid");
 
-        if (!responsePost.ok)
-            throw new Error("Something went wrong, try again");
+            if (!responsePost.ok)
+                throw new Error("Something went wrong, try again");
 
-        alert("User registered successfully!");
-        showLogin(); // Return to login view after successful registration
+            alert("User registered successfully!");
+            showLogin(); // חזרה למסך ההתחברות לאחר הרשמה מוצלחת
 
-    } catch (error) {
-        alert(error);
+        } catch (error) {
+            alert(error);
+        }
     }
-}
-}
+};
+
 const showRegister = () => {
     document.querySelector(".logInDiv").style.display = "none";
     document.querySelector(".signUpDiv").classList.add("show");
@@ -123,8 +115,7 @@ const showLogin = () => {
     document.querySelector("#newUser").style.display = "block";
 };
 
-const Login = async () =>
-{
+const Login = async () => {
     const user = getAllDetilesForLogin();
     if (!checkData(user)) {
         alert("All fields are required");
@@ -139,34 +130,20 @@ const Login = async () =>
             }
         });
 
-
-        //    method: "POST",
-        //    headers: {
-        //        "Content-Type": "application/json"
-        //    }
-        //});
-
         if (responsePost.status == 204)
-            alert("User not found")
-        if (!responsePost.ok)
-            alert("Eror,please try again")
-        else
-        { 
-        const dataPost = await responsePost.json();
-        sessionStorage.setItem("user", JSON.stringify(dataPost));
-        window.location.href = "../html/Products.html";
+            alert("User not found");
+        else if (!responsePost.ok)
+            alert("Error, please try again");
+        else {
+            const dataPost = await responsePost.json();
+            sessionStorage.setItem("user", JSON.stringify(dataPost));
+            window.location.href = "../html/Products.html";
         }
-
-    }
-    catch (error)
-    {
+    } catch (error) {
         alert(error);
-
     }
+};
 
-
-
-}
 
 
 

@@ -17,7 +17,7 @@ namespace TestProject1
             var users = new List<User>() { user };
             mokContext.Setup(x => x.Users).ReturnsDbSet(users);
             var userRepository = new UserRepository(mokContext.Object);
-            var result = await userRepository.LogIn(user.UserName,user.Password);
+            var result = await userRepository.LogIn(user.UserName);
             Assert.Equal(user, result);
             
         }
@@ -31,7 +31,7 @@ namespace TestProject1
             mockContext.Setup(x => x.Users).ReturnsDbSet(users);
             var userRepository = new UserRepository(mockContext.Object);
 
-            var result = await userRepository.LogIn("wrong@email.com", user.Password);
+            var result = await userRepository.LogIn("wrong@email.com");
 
             Assert.Null(result);
         }
@@ -65,7 +65,7 @@ namespace TestProject1
             var repository = new UserRepository(mockContext.Object);
 
             // Act
-            var result = await repository.LogIn(user.UserName, "wrongpassword");
+            var result = await repository.LogIn(user.UserName);
 
             // Assert
             Assert.Null(result);

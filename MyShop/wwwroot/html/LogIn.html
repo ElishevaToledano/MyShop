@@ -21,9 +21,9 @@
     <div class="signUpDiv">
         <input id="userName" type="email" placeholder="username" />
         <br />
-        <input id="password" type="password" placeholder="password" onblur="checkPassword()" />
-
-        <meter id="strengthMeter" min="0" max="4" value="0"></meter>
+        <input type="password" id="password" oninput="checkPassword()" />
+        <meter max="4" min="0" value="0" id="strengthMeter"></meter>
+        <div id="passwordMessage" style="color:red; font-weight:bold;"></div>
         <br />
         <input id="firstName" type="text" placeholder="first name" />
         <br />
