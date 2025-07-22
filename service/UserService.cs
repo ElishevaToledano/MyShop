@@ -57,18 +57,18 @@ namespace service
 
         public async Task<User?> AddUser(User user)
         {
-            // נוודא שהסיסמה היא לא null או ריקה
-            if (string.IsNullOrWhiteSpace(user.Password))
-                return null;
+            //// נוודא שהסיסמה היא לא null או ריקה
+            //if (string.IsNullOrWhiteSpace(user.Password))
+            //    return null;
 
-            // אם הסיסמה כבר בפורמט salt:hash - אז היא מוצפנת, לא נרצה להריץ עליה ZXCVBN
-            if (user.Password.Contains(":"))
-                return null;  // או throw exception שמתאר שהסיסמה כבר מוצפנת
+            //// אם הסיסמה כבר בפורמט salt:hash - אז היא מוצפנת, לא נרצה להריץ עליה ZXCVBN
+            //if (user.Password.Contains(":"))
+            //    return null;  // או throw exception שמתאר שהסיסמה כבר מוצפנת
 
             if (CheckPassword(user.Password) > 2)  // כאן בטוח שמפעילים ZXCVBN על סיסמה גולמית
             {
                 string salt = GenerateSalt(16);
-                string hash = HashPassword(user.Password!, salt, 10000, 32);
+                string hash = HashPassword(user.Password, salt, 10000, 32);
                 user.Password = CreatePasswordField(salt, hash);
                 return await userRepository.AddUser(user);
             }
@@ -94,7 +94,6 @@ namespace service
         }
 
 
-        // התחברות - מקבל את השדה Password, מפצל לסולט והאש, ומשווה
         public async Task<User> LogIn(string userName, string password)
         {
             var user = await userRepository.LogIn(userName);
