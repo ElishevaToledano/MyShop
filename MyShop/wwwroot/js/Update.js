@@ -17,7 +17,7 @@ strengthMeter.value = 0;
 
 const meterColor = (resData) => {
     strengthMeter.value = resData;
-}
+} 
 
 
 // Function to get password details
