@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MyShop;
+using MyShop.Middleware;
 using NLog.Web;
 using PresidentsApp.Middlewares;
 using Repository;
@@ -24,7 +24,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
-builder.Services.AddDbContext<ApiOrmContext>(options => 
+builder.Services.AddDbContext<ApiOrmContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 if (builder.Environment.IsDevelopment())
@@ -39,14 +39,13 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowMyOrigins",
-        policy =>
-        {
-            policy.WithOrigins("https://localhost:44379")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials();
-        });
+    options.AddPolicy("AllowMyOrigins", policy =>
+    {
+        policy.WithOrigins("https://localhost:44379")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
 });
 
 builder.Services.AddRateLimiter(options =>
@@ -60,29 +59,7 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-var jwtSection = builder.Configuration.GetSection("Jwt");
-var jwtKey = jwtSection["Key"];
-var jwtIssuer = jwtSection["Issuer"];
-var jwtAudience = jwtSection["Audience"];
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey))
-    };
-});
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
@@ -92,19 +69,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Add(
-        "Content-Security-Policy",
-        "script-src 'self' 'unsafe-inline' www.google.com; " +
-        "default-src 'self'; " +
-        "connect-src 'self' wss://localhost:44303 wss://localhost:44358 wss://localhost:44391; " +
-        "navigate-to 'none';" +
-        "style-src 'self' 'unsafe-inline' ; " +
-        "img-src 'self'");
-
-    await next();
-});
+app.UseMiddleware<ContentSecurityPolicyMiddleware>();
 
 app.UseErrorHandlingMiddleware();
 app.UseHttpsRedirection();
