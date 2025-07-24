@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using service;
 using Entity;
 using AutoMapper;
 using dto;
+using System.Text.Json;
 
 namespace MyShop.Controllers
 {
@@ -10,30 +12,64 @@ namespace MyShop.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        IMapper _mapper;
-        IProductService ProductService;
-        public ProductsController(IProductService productService, IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly IProductService _productService;
+        private readonly IDistributedCache _cache;
+
+        public ProductsController(IProductService productService, IMapper mapper, IDistributedCache cache)
         {
-            ProductService = productService;
+            _productService = productService;
             _mapper = mapper;
+            _cache = cache;
         }
 
-        // GET: api/<ProductsController>
         [HttpGet]
         public async Task<ActionResult<List<productDTO>>> Get([FromQuery] string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
         {
-            List<Product> products = await ProductService.GetAllProducts(desc, minPrice, maxPrice, categoryIds);
-            List<productDTO> productsDTO = _mapper.Map<List<Product>, List<productDTO>>(products);
-            return Ok(productsDTO);
+            string cacheKey = $"products-{desc}-{minPrice}-{maxPrice}-{string.Join("-", categoryIds ?? Array.Empty<int?>())}";
+            var cachedProducts = await _cache.GetStringAsync(cacheKey);
+            if (!string.IsNullOrEmpty(cachedProducts))
+            {
+                var productsDTO = JsonSerializer.Deserialize<List<productDTO>>(cachedProducts);
+                return Ok(productsDTO);
+            }
+
+            var products = await _productService.GetAllProducts(desc, minPrice, maxPrice, categoryIds);
+            var productsDTOMapped = _mapper.Map<List<Product>, List<productDTO>>(products);
+
+            var serializedData = JsonSerializer.Serialize(productsDTOMapped);
+            var options = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+            await _cache.SetStringAsync(cacheKey, serializedData, options);
+
+            return Ok(productsDTOMapped);
         }
 
-        //GET api/<ProductController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<productDTO>> Get(int id)
         {
-            Product product1 = await ProductService.GetProductbyId(id);
-            productDTO ProductDTO=_mapper.Map<Product, productDTO>(product1);
-            return Ok(ProductDTO);
+            string cacheKey = $"product-{id}";
+            var cachedProduct = await _cache.GetStringAsync(cacheKey);
+            if (!string.IsNullOrEmpty(cachedProduct))
+            {
+                var productDTO = JsonSerializer.Deserialize<productDTO>(cachedProduct);
+                return Ok(productDTO);
+            }
+
+            var product = await _productService.GetProductbyId(id);
+            if (product == null)
+                return NotFound();
+
+            var productDTOMapped = _mapper.Map<Product, productDTO>(product);
+
+            var serializedData = JsonSerializer.Serialize(productDTOMapped);
+            var options = new DistributedCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+            await _cache.SetStringAsync(cacheKey, serializedData, options);
+
+            return Ok(productDTOMapped);
         }
     }
 }

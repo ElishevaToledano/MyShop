@@ -1,19 +1,24 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using MyShop;
 using MyShop.Middleware;
 using NLog.Web;
 using PresidentsApp.Middlewares;
 using Repository;
 using service;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -24,17 +29,22 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+
 builder.Services.AddDbContext<ApiOrmContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-if (builder.Environment.IsDevelopment())
+builder.Services.AddStackExchangeRedisCache(options =>
 {
-    Console.WriteLine($"Connection string loaded: {!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("DefaultConnection"))}");
-}
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "MyShopRedisInstance";
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Host.UseNLog();
+
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(options =>
@@ -69,7 +79,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ContentSecurityPolicyMiddleware>();
+app.UseMiddleware<MyShop.Middleware.ContentSecurityPolicyMiddleware>();
 
 app.UseErrorHandlingMiddleware();
 app.UseHttpsRedirection();
