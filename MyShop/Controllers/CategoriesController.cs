@@ -5,10 +5,6 @@ using AutoMapper;
 using dto;
 using Microsoft.Extensions.Caching.Memory;
 
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MyShop.Controllers
 {
     [Route("api/[controller]")]
@@ -34,10 +30,8 @@ namespace MyShop.Controllers
                 categories = await CategoryService.GetAllCategories();
                 _memoryCache.Set("categories", categories, TimeSpan.FromMinutes(30));
             }
-            //List<Category> categories = await CategoryService.GetAllCategories();
             List<categoryDTO> categoriesDTO = _mapper.Map<List<Category>, List<categoryDTO>>(categories);
             return Ok(categoriesDTO);
-            //return await service.GetCategories();
         }
 
 

@@ -7,14 +7,12 @@ const productList = addEventListener("load", async () => {
     sessionStorage.setItem("basket", JSON.stringify(basketArr))
     document.querySelector("#ItemsCountText").innerHTML = basketArr.length
 
-
     if (sessionStorage.getItem('user') != null) {
         document.getElementById('Login').style.display = 'block';
         document.getElementById('Logout').style.display = 'block';
         document.getElementById('Update').style.display = 'block';
     }
-    else
-    {
+    else {
         document.getElementById('Login').style.display = 'block';
         document.getElementById('Logout').style.display = 'none';
         document.getElementById('Update').style.display = 'none';
@@ -52,27 +50,26 @@ const drawProducts = async () => {
             }
         }
     }
-    try { 
-    const allProducts = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        query: {
-            desc: nameSearch,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            categoryIds: categoryIds1
-        }
-    });
+    try {
+        const allProducts = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            query: {
+                desc: nameSearch,
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                categoryIds: categoryIds1
+            }
+        });
         const dataProducts = await allProducts.json();
 
-        //console.log('GET Data:', dataProducts)
         showAllProducts(dataProducts);
-}
-catch(error) {
-    alert("error")
-}
+    }
+    catch (error) {
+        alert("error")
+    }
 }
 const showAllProducts = async (products) => {
     for (let i = 0; i < products.length; i++) {
@@ -81,7 +78,7 @@ const showAllProducts = async (products) => {
 }
 
 const showOneProduct = async (product) => {
-    let tmp = document.getElementById("temp-card"); 
+    let tmp = document.getElementById("temp-card");
     let cloneProduct = tmp.content.cloneNode(true)
     if (product.image)
         cloneProduct.querySelector("img").src = "../images/" + product.image
@@ -99,14 +96,13 @@ const addToCart = (product) => {
         productsInbasket.push(product.productId)
         sessionStorage.setItem("basket", JSON.stringify(productsInbasket))
         document.querySelector("#ItemsCountText").innerHTML = productsInbasket.length
-            }
+    }
     else {
         alert("please sign")
         window.location.href = "../html/LogIn.html"
     }
 
 }
-
 
 const showAllCategories = async () => {
 

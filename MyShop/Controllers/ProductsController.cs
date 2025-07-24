@@ -4,10 +4,6 @@ using Entity;
 using AutoMapper;
 using dto;
 
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MyShop.Controllers
 {
     [Route("api/[controller]")]
@@ -30,6 +26,7 @@ namespace MyShop.Controllers
             List<productDTO> productsDTO = _mapper.Map<List<Product>, List<productDTO>>(products);
             return Ok(productsDTO);
         }
+
         //GET api/<ProductController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<productDTO>> Get(int id)
@@ -38,6 +35,5 @@ namespace MyShop.Controllers
             productDTO ProductDTO=_mapper.Map<Product, productDTO>(product1);
             return Ok(ProductDTO);
         }
-
     }
 }

@@ -7,5 +7,4 @@ namespace dto
          string? UserUserName, ICollection<orderItemsDTO> OrderItems);
 public record addOrderDTO(DateTime OrderDate, int? OrderSum,
     int? UserId, ICollection<orderItemsDTO> OrderItems);
-
 }

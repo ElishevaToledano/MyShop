@@ -1,4 +1,5 @@
-﻿html, body {
+﻿html,
+body {
     direction: rtl;
     margin: 0;
     padding: 0;
@@ -26,7 +27,8 @@ td.imageColumn {
     width: 66px;
 }
 
-th.itemsColumn, td.imageColumn {
+th.itemsColumn,
+td.imageColumn {
     padding-right: 10px;
 }
 
@@ -37,15 +39,14 @@ td {
     border-bottom: 1px solid #C7C5C5;
 }
 
-
-.itemName, .subItemName {
+.itemName,
+.subItemName {
     font-family: 'azo-sans', sans-serif;
     font-weight: 400;
     margin-bottom: 2px;
     font-size: 14px;
     line-height: 100%;
 }
-
 
 .availabilityColumn {
     width: 205px;
@@ -100,17 +101,17 @@ td {
     padding-left: 15px;
 }
 
-    #title h1 {
-        margin: 15px 0 2px 0;
-        font-family: 'azo-sans', sans-serif;
-        font-size: 18px;
-        font-weight: 300;
-        line-height: 100%;
-        float: right;
-    }
+#title h1 {
+    margin: 15px 0 2px 0;
+    font-family: 'azo-sans', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 100%;
+    float: right;
+}
 
 h1 {
-    font: 236.36% 'azo-sans',sans-serif;
+    font: 236.36% 'azo-sans', sans-serif;
 }
 
 #title p {
@@ -120,7 +121,8 @@ h1 {
     padding-top: 19px;
 }
 
-p, fieldset {
+p,
+fieldset {
     margin-bottom: 1em;
 }
 
@@ -138,13 +140,14 @@ a.GoToCheckout.TopLink {
     font-size: 11px;
 }
 
-.nxbtn.primary, .nxbtn.secondary {
+.nxbtn.primary,
+.nxbtn.secondary {
     padding-top: 6px;
     padding-bottom: 7px;
     color: #fff;
     border: 0;
     text-transform: uppercase;
-    font-family: 'azo-sans',sans-serif;
+    font-family: 'azo-sans', sans-serif;
 }
 
 .ContentArea a {

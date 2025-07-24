@@ -7,7 +7,9 @@
     <script src="../js/ShoppingBag.js"></script>
     <template id="temp-row">
         <tr class="item-row">
-            <td class="imageColumn"><a rel="lightbox" href="#"><div class="image"></div></a></td>
+            <td class="imageColumn"><a rel="lightbox" href="#">
+                    <div class="image"></div>
+                </a></td>
             <td class="descriptionColumn">
                 <div>
                     <h3 class="itemName"></h3>
@@ -20,10 +22,11 @@
             <td class="availabilityColumn">
                 <div>במלאי</div>
             </td>
-            <td class="totalColumn delete" >
+            <td class="totalColumn delete">
                 <div class="expandoHeight" style="height: 99px;">
-                   <p class="price"></p>
-                   <a href="#" title="לחצו כאן כדי להסיר את פריט זה" class="Hide DeleteButton showText" id="delete">הסרת פריט</a>
+                    <p class="price"></p>
+                    <a href="#" title="לחצו כאן כדי להסיר את פריט זה" class="Hide DeleteButton showText"
+                        id="delete">הסרת פריט</a>
                 </div>
             </td>
         </tr>
@@ -38,7 +41,8 @@
                 הסל שלך מכיל <span id="itemCount"></span> פריטים ומגיע לסך של <span id="totalAmount"></span>.
             </p>
             <a class="nxbtn primary GoToCheckout TopLink checkout_transfer" href="#" onclick="placeOrder();
-    return false;">לביצוע ההזמנה</a> <a class="shopmore" href="Products.html?fromShoppingBag=1">המשך בקניה</a> <div class="ClearBoth"></div>
+    return false;">לביצוע ההזמנה</a> <a class="shopmore" href="Products.html?fromShoppingBag=1">המשך בקניה</a>
+            <div class="ClearBoth"></div>
         </div>
         <div class="cistGroup">
             <table id="items" class="items">

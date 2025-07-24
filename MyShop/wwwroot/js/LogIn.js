@@ -27,12 +27,10 @@ const checkData = (user) => {
     return (user.userName && user.password);
 };
 
-// מעדכן את ערך המטר לפי הציון
 const meterColor = (score) => {
     strengthMeter.value = score;
 };
 
-// פונקציה לקבלת סיסמה מהקלט
 const getDetailsOfPassword = () => {
     return document.getElementById("password").value;
 };
@@ -71,7 +69,6 @@ const checkPassword = async () => {
     }
 };
 
-
 const addNewUser = async () => {
     const newUser = getAllDetilesForSignUp();
     if (strengthMeter.value < 3)
@@ -89,14 +86,14 @@ const addNewUser = async () => {
             if (responsePost.status === 400)
                 throw new Error("All fields are required");
             if (responsePost.status === 401)
-                throw new Error("one of he fields are not valid");
-
+                throw new Error("one of the fields are not valid");
+            if (responsePost.status === 409)
+                throw new Error("this username already exists please choose another username");
             if (!responsePost.ok)
                 throw new Error("Something went wrong, try again");
 
             alert("User registered successfully!");
-            showLogin(); // חזרה למסך ההתחברות לאחר הרשמה מוצלחת
-
+            showLogin();
         } catch (error) {
             alert(error);
         }

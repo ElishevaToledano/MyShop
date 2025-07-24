@@ -1,6 +1,7 @@
 ﻿body {
-direction:rtl
+   direction: rtl
 }
-.register{
-   visibility:hidden
+
+.register {
+   visibility: hidden
 }

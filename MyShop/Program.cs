@@ -12,7 +12,6 @@ using service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -25,14 +24,31 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
-builder.Services.AddDbContext<ApiOrmContext>(options => options.UseSqlServer(
-    "Server=SRV2\\PUPILS;Database=api_orm;Trusted_Connection=True;TrustServerCertificate=True"));
+builder.Services.AddDbContext<ApiOrmContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+if (builder.Environment.IsDevelopment())
+{
+    Console.WriteLine($"Connection string loaded: {!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("DefaultConnection"))}");
+}
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseNLog();
 builder.Services.AddMemoryCache();
 
-// הוספת Rate Limiter
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMyOrigins",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:44379")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        });
+});
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("fixed", o =>
@@ -44,7 +60,6 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-// קריאת הגדרות JWT מ-appsettings.json
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection["Key"];
 var jwtIssuer = jwtSection["Issuer"];
@@ -71,7 +86,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -80,18 +94,15 @@ if (app.Environment.IsDevelopment())
 
 app.Use(async (context, next) =>
 {
-    var csp = "default-src 'self'; " +
-              "script-src 'self' https://www.googletagmanager.com 'unsafe-inline'; " +
-              "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
-              "font-src 'self' https://fonts.gstatic.com; " +
-              "img-src 'self' data:; " +
-              "object-src 'none'; " +
-              "connect-src 'self'; " +
-              "frame-ancestors 'none'; " +
-              "base-uri 'self'; " +
-              "form-action 'self';";
+    context.Response.Headers.Add(
+        "Content-Security-Policy",
+        "script-src 'self' 'unsafe-inline' www.google.com; " +
+        "default-src 'self'; " +
+        "connect-src 'self' wss://localhost:44303 wss://localhost:44358 wss://localhost:44391; " +
+        "navigate-to 'none';" +
+        "style-src 'self' 'unsafe-inline' ; " +
+        "img-src 'self'");
 
-    context.Response.Headers.Add("Content-Security-Policy", csp);
     await next();
 });
 
@@ -99,6 +110,7 @@ app.UseErrorHandlingMiddleware();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRateLimiter();
+app.UseCors("AllowMyOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseMiddlewareRating();

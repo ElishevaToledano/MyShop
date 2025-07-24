@@ -6,8 +6,5 @@ namespace dto
         ICollection<orderDTO> Orders);
     public record RegisterUserDTO(string UserName, string? FirstName,
         string? LastName, string? Password);
-    //public record UpdateUserDTO(string UserName, string? FirstName,
-    //string? LastName, string? Password);
-
 }
 
