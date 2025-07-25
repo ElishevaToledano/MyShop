@@ -36,7 +36,6 @@ builder.Services.AddDbContext<ApiOrmContext>(options =>
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
-    options.InstanceName = "MyShopRedisInstance";
 });
 
 

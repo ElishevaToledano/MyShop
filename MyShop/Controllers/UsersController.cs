@@ -100,10 +100,28 @@ namespace MyShop.Controllers
 
         [HttpPost("password")]
         [AllowAnonymous]
-        public IActionResult CheckPassword([FromBody] string password)
+        public IActionResult CheckPassword([FromBody] PasswordRequest request)
         {
-            int score = _userService.CheckPassword(password);
-            return Ok(new { score });
+            if (request == null || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest("Password is required");
+            }
+            
+            try 
+            {
+                int score = _userService.CheckPassword(request.Password);
+                return Ok(new { score });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking password strength");
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+        
+        public class PasswordRequest
+        {
+            public string Password { get; set; } = string.Empty;
         }
 
         [HttpPut("{id}")]

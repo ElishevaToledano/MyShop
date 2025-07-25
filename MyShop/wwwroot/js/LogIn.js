@@ -46,7 +46,7 @@ const checkPassword = async () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(password)
+            body: JSON.stringify({ password })  // שליחת אובייקט JSON עם מאפיין password
         });
 
         const responseData = await responsePost.json();
