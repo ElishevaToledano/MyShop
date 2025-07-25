@@ -91,7 +91,7 @@ namespace MyShop.Controllers
             Response.Cookies.Append("jwt", token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
+                Secure = true, 
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddHours(2)
             });
