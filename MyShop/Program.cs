@@ -10,8 +10,7 @@ using PresidentsApp.Middlewares;
 using Repository;
 using service;
 using System.Text;
-
-
+//
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddUserSecrets<Program>();
